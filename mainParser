@@ -104,7 +104,10 @@ public class mainParser {
             FileWriter myWriter = new FileWriter(newName);
             while (sc.hasNextLine()) {
                 String abc = sc.nextLine();
-                System.out.println(abc);
+                String find = "financial covenant";
+                int i = abc.indexOf(find);
+                if (i > 0)
+                    System.out.println(abc.substring(i, i + find.length()));
                 myWriter.write(sc.nextLine());
             }
             myWriter.close();
@@ -116,3 +119,4 @@ public class mainParser {
 
     }
 }
+
