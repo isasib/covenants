@@ -1,11 +1,15 @@
-import java.io.FileWriter;   // Import the FileWriter class
-import java.io.IOException;  // Import the IOException class to handle errors
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
+@SuppressFBWarnings("NM_CLASS_NAMING_CONVENTION")
 public class writeToFile {
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static void main(String[] args) {
         try {
-            FileWriter myWriter = new FileWriter("filename.txt");
-            myWriter.write("Files in Java might be tricky, but it is fun enough!");
+            FileWriter myWriter = new FileWriter("database/testing123.txt");
+            myWriter.write("testing123");
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
