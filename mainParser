@@ -44,7 +44,7 @@ public class mainParser {
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static boolean createFile(String newName) {
         try {
-            File myObj = new File("database/" + newName);
+            File myObj = new File(newName);
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
                 return true;
