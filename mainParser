@@ -40,6 +40,7 @@ public class mainParser {
         return true;
     }
 
+    //______________________________________________________________________________________________________________
     //creates a new file that will be written to
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static boolean createFile(String newName) {
@@ -57,6 +58,7 @@ public class mainParser {
         return false;
     }
 
+    //____________________________________________________________________________________________________________
     //terminates program
     public static void term() {
         System.out.println("You indicated that you wished to " +
@@ -65,7 +67,8 @@ public class mainParser {
         System.exit(0);
     }
 
-
+    //___________________________________________________________________________________________________________
+//main
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static void main(String[] args) {
 
@@ -79,7 +82,7 @@ public class mainParser {
             term();
         }
 
-        // Create File
+        // Creates File
         System.out.println("What would you like the file that will be created during the " +
                 "duration of this program to be called? Please remember to include .txt at " +
                 "the end.");
@@ -100,6 +103,8 @@ public class mainParser {
             Scanner sc = new Scanner(file_open);
             FileWriter myWriter = new FileWriter(newName);
             while (sc.hasNextLine()) {
+                String abc = sc.nextLine();
+                System.out.println(abc);
                 myWriter.write(sc.nextLine());
             }
             myWriter.close();
