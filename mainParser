@@ -69,11 +69,13 @@ public class mainParser {
     }
 
     //___________________________________________________________________________________________________________
-    public static int ends(String afterStart) {
+    public static boolean ends(String afterStart) {
         StringBuilder capitalLetters = new StringBuilder();
         String exception1 = "EBITDA";
         String exception2 = "CFADS";
         String exception3 = "COVENANTS";
+        String exception4 = "AFFIRMATIVE COVENANTS";
+        String exception5 = "NEGATIVE COVENANTS";
         int index = 0;
         char currentIndex = afterStart.charAt(0);
         while (Character.isUpperCase(currentIndex)) {
@@ -83,10 +85,12 @@ public class mainParser {
         }
         if (capitalLetters.toString().equals(exception1) ||
                 capitalLetters.toString().equals(exception2)
-                || capitalLetters.toString().equals(exception3)) {
-            return -17;
+                || capitalLetters.toString().equals(exception3)
+                || capitalLetters.toString().equals(exception4)
+                || capitalLetters.toString().equals(exception5)) {
+            return true;
         } else {
-            return -10;
+            return false;
         }
     }
 
@@ -138,7 +142,7 @@ public class mainParser {
             int indexOfAbc = fileContents.indexOf(abc);
             fileContents.delete(0, indexOfAbc);
 
-            //finds end of covenant, starts at 7 so 'Covenant' is not included
+            //finds end of covenant, starts at  so 'Covenant' is not included
             for (j = 0; j < fileContents.length(); j++) {
                 char current = fileContents.charAt(j);
                 if (Character.isUpperCase(current)) {
@@ -148,8 +152,8 @@ public class mainParser {
                 }
                 if (countCapitals == 2) {
                     String newbie = fileContents.substring(j - 1);
-                    int result = ends(newbie);
-                    if (result == -10) {
+                    boolean result = ends(newbie);
+                    if (!result) {
                         fileContents.delete(j - 1, fileContents.length() - 1);
                     }
                 }
