@@ -69,11 +69,35 @@ public class mainParser {
     }
 
     //___________________________________________________________________________________________________________
+    public static int ends(String afterStart) {
+        StringBuilder capitalLetters = new StringBuilder();
+        String exception1 = "EBITDA";
+        String exception2 = "CFADS";
+        String exception3 = "COVENANTS";
+        int index = 0;
+        char currentIndex = afterStart.charAt(0);
+        while (Character.isUpperCase(currentIndex)) {
+            capitalLetters.append(currentIndex);
+            index++;
+            currentIndex = afterStart.charAt(index);
+        }
+        if (capitalLetters.toString().equals(exception1) ||
+                capitalLetters.toString().equals(exception2)
+                || capitalLetters.toString().equals(exception3)) {
+            return -17;
+        } else {
+            return -10;
+        }
+    }
+
+    //___________________________________________________________________________________________________________
 //main
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static void main(String[] args) {
         //local variables
         int i = 0;
+        int j = 0;
+        int countCapitals = 0;
         StringBuilder fileContents = new StringBuilder();
 
         //scanPDF
@@ -108,14 +132,31 @@ public class mainParser {
             while ((i = file_open.read()) != -1) {
                 fileContents.append((char) i);
             }
-            String abc = "FINANCIAL COVENANT";
+
+            //finds beginning of covenant
+            String abc = "COVENANT";
             int indexOfAbc = fileContents.indexOf(abc);
-            System.out.println(indexOfAbc);
+            fileContents.delete(0, indexOfAbc);
+
+            //finds end of covenant, starts at 7 so 'Covenant' is not included
+            for (j = 8; j < fileContents.length(); j++) {
+                char current = fileContents.charAt(j);
+                if (Character.isUpperCase(current)) {
+                    countCapitals++;
+                } else {
+                    countCapitals = 0;
+                }
+                if (countCapitals == 2) {
+                    String newbie = fileContents.substring(j - 1);
+                    int result = ends(newbie);
+                    if (result == -10) {
+                        fileContents.delete(j - 1, fileContents.length() - 1);
+                    }
+                }
+            }
             myWriter.write(fileContents.toString());
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
-            String orienting = fileContents.substring(indexOfAbc, indexOfAbc + 200);
-            System.out.println(orienting);
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
