@@ -71,6 +71,8 @@ public class mainParser {
 //main
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static void main(String[] args) {
+        //local variables
+        int countInstances = 0;
 
         //scanPDF
         Scanner input = new Scanner(System.in);
@@ -106,8 +108,9 @@ public class mainParser {
                 String abc = sc.nextLine();
                 String find = "financial covenant";
                 int i = abc.indexOf(find);
-                if (i > 0)
-                    System.out.println(abc.substring(i, i + find.length()));
+                if (i > 0) {
+                    System.out.println(abc);
+                }
                 myWriter.write(sc.nextLine());
             }
             myWriter.close();
