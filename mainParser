@@ -139,7 +139,7 @@ public class mainParser {
             fileContents.delete(0, indexOfAbc);
 
             //finds end of covenant, starts at 7 so 'Covenant' is not included
-            for (j = 8; j < fileContents.length(); j++) {
+            for (j = 0; j < fileContents.length(); j++) {
                 char current = fileContents.charAt(j);
                 if (Character.isUpperCase(current)) {
                     countCapitals++;
