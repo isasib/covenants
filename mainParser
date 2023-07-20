@@ -115,26 +115,190 @@ public class mainParser {
         top += "Amount: A$" + amount + "\n";
         top += "Date: " + date + "\n";
         top += "\n";
-        top += "\n";
         return top;
     }
 
     //___________________________________________________________________________________________________________
     public static String templateRR(StringBuilder covenants) {
+        StringBuilder copycat = new StringBuilder();
         StringBuilder secondInstance = new StringBuilder();
+        int i;
+        int j;
         String mid = "REPORTING REQUIREMENTS: ";
 
-        //find start of reporting requirements
+        //find start of financial statement requirements
         String fs = "Financial statements";
         int lengthfs = fs.length();
         int indexfs = covenants.indexOf(fs);
+        int indexp = 0;
+        boolean finstat = false;
+        if (indexfs != -1) {
+            finstat = true;
+            //find end of reporting requirements
+            secondInstance.append(covenants.substring(indexfs + lengthfs, covenants.length()));
+            String period = ".";
+            indexp = secondInstance.indexOf(period);
+            mid += (secondInstance.substring(0, indexp));
+            copycat.append(covenants.substring(0, indexfs));
+        } else {
+            mid += "No financial reporting requirements were found";
+            copycat.append(covenants.substring(0, covenants.length()));
+        }
 
-        //find end of reporting requirements
-        secondInstance.append(covenants.substring(indexfs + lengthfs, covenants.length()));
-        String period = ".";
-        int indexp = secondInstance.indexOf(period);
+        //find certification requirements
+        copycat.append(covenants.substring(indexp, covenants.length()));
+        String certy = "Certificate";
+        String certificates = "";
+        int indexc = copycat.indexOf(certy);
+        int start;
+        int end;
+        boolean certypart = false;
+        if (indexc != -1) {
+            String inbetween = copycat.substring(indexc, indexc + 1750);
+            String keyword1 = "shall be certified by";
+            int indexk1 = inbetween.indexOf(keyword1);
+            if (indexk1 != -1) {
+                certypart = true;
+                start = 0;
+                end = 0;
+                for (i = indexk1; i > 0; i--) {
+                    char current = inbetween.charAt(i);
+                    if (current == '.') {
+                        if (!Character.isDigit(inbetween.charAt(i + 1))) {
+                            start = i;
+                            break;
+                        }
+                    }
+                }
+                for (j = indexk1; j < inbetween.length(); j++) {
+                    char current = inbetween.charAt(j);
+                    if (current == '.') {
+                        end = j;
+                        break;
+                    }
+                }
+                certificates = inbetween.substring(start + 1, end + 1);
+                int k;
+                for (k = 0; k < certificates.length(); k++) {
+                    char ct = certificates.charAt(k);
+                    if (Character.isLetter(ct) && ct != 'b') {
+                        break;
+                    }
+                }
+                int l = certificates.length();
+                certificates = certificates.substring(k, l);
+            }
+        }
+        if (certypart) {
+            mid += "\n";
+            mid += "\n";
+            mid += certificates;
+        } else {
+            mid += "\n";
+            mid += "\n";
+            mid += "No certificate reporting requirements were found";
+        }
 
-        mid += (secondInstance.substring(0, indexp));
+        //find accounting practice requirements
+        String audit = "audited by";
+        String auditpart = "";
+        int indexaudit = copycat.indexOf(audit);
+        boolean ap = false;
+        int start1 = 0;
+        int end1 = 1;
+        int m;
+        int n;
+        if (indexaudit != -1) {
+            ap = true;
+            for (m = indexaudit; m > 0; m--) {
+                char current = copycat.charAt(m);
+                if (current == '.') {
+                    if (!Character.isDigit(copycat.charAt(m + 1))) {
+                        start1 = m;
+                        break;
+                    }
+                }
+            }
+            for (n = indexaudit; n < copycat.length(); n++) {
+                char current = copycat.charAt(n);
+                if (current == '.') {
+                    end1 = n;
+                    break;
+                }
+            }
+            auditpart = copycat.substring(start1, end1);
+            int q;
+            for (q = 0; q < auditpart.length(); q++) {
+                char ct = auditpart.charAt(q);
+                if (Character.isLetter(ct)) {
+                    break;
+                }
+            }
+            int ll = auditpart.length();
+            auditpart = auditpart.substring(q, ll);
+        }
+
+        if (ap) {
+            mid += "\n";
+            mid += "\n";
+            mid += auditpart;
+        } else {
+            mid += "\n";
+            mid += "\n";
+            mid += "No requirements for accounting practices were found";
+        }
+
+        //find valuations of assets
+        String valuations = "valuations";
+        String valuepart = "";
+        int indexv = copycat.indexOf(valuations);
+        boolean v = false;
+        int start2 = 0;
+        int end2 = 1;
+        int rv;
+        int sv;
+        if (indexv != -1) {
+            v = true;
+            for (rv = indexv; rv > 0; rv--) {
+                char current = copycat.charAt(rv);
+                if (current == '.') {
+                    if (!Character.isDigit(copycat.charAt(rv + 1))) {
+                        start2 = rv;
+                        break;
+                    }
+                }
+            }
+            for (sv = indexv; sv < copycat.length(); sv++) {
+                char current = copycat.charAt(sv);
+                if (current == '.') {
+                    end2 = sv;
+                    break;
+                }
+            }
+            valuepart = copycat.substring(start2, end2);
+            int qv;
+            for (qv = 0; qv < valuepart.length(); qv++) {
+                char ct = valuepart.charAt(qv);
+                if (Character.isLetter(ct)) {
+                    break;
+                }
+            }
+            int ll = valuepart.length();
+            valuepart = valuepart.substring(qv, ll);
+        }
+        if (v) {
+            mid += "\n";
+            mid += "\n";
+            mid += valuepart;
+            mid += "\n";
+            mid += "\n";
+        } else {
+            mid += "\n";
+            mid += "\n";
+            mid += "No requirements concerning valuations were found";
+            mid += "\n";
+            mid += "\n";
+        }
         return mid;
     }
 
@@ -382,10 +546,9 @@ public class mainParser {
 
             //create template
             String tt = templateTop(borrower, arranger, agent, amount, date);
-            fileContents.insert(0, tt);
-
             String tm = templateRR(rr);
-            System.out.println(tm);
+            String template = tt + tm;
+            fileContents.insert(0, template);
 
 
             myWriter.write(fileContents.toString());
