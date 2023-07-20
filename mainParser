@@ -112,11 +112,30 @@ public class mainParser {
         String top = "Borrower: " + borrower + "\n";
         top += "Arranger: " + arranger + "\n";
         top += "Agent: " + agent + "\n";
-        top += "Amount: $" + amount + "\n";
+        top += "Amount: A$" + amount + "\n";
         top += "Date: " + date + "\n";
         top += "\n";
         top += "\n";
         return top;
+    }
+
+    //___________________________________________________________________________________________________________
+    public static String templateRR(StringBuilder covenants) {
+        StringBuilder secondInstance = new StringBuilder();
+        String mid = "REPORTING REQUIREMENTS: ";
+
+        //find start of reporting requirements
+        String fs = "Financial statements";
+        int lengthfs = fs.length();
+        int indexfs = covenants.indexOf(fs);
+
+        //find end of reporting requirements
+        secondInstance.append(covenants.substring(indexfs + lengthfs, covenants.length()));
+        String period = ".";
+        int indexp = secondInstance.indexOf(period);
+
+        mid += (secondInstance.substring(0, indexp));
+        return mid;
     }
 
     //___________________________________________________________________________________________________________
@@ -174,6 +193,8 @@ public class mainParser {
         int countCapitals = 0;
         StringBuilder fileContents = new StringBuilder();
         StringBuilder copy1 = new StringBuilder();
+        StringBuilder rr = new StringBuilder();
+        StringBuilder covenants = new StringBuilder();
 
         //scanPDF
         Scanner input = new Scanner(System.in);
@@ -216,24 +237,36 @@ public class mainParser {
             String b3 = "BORROWER";
             String b4 = "for";
             String borrower = "";
-            int indexb = fileContents.indexOf(b1);
-            if (indexb != -1 && indexb < 250) {
-                copy1.append(fileContents.substring(indexb));
+            int indexb1 = fileContents.indexOf(b1);
+            if (indexb1 == -1) {
+                indexb1 = 251;
+            }
+            int indexb2 = fileContents.indexOf(b2);
+            if (indexb2 == -1) {
+                indexb2 = 251;
+            }
+            int indexb3 = fileContents.indexOf(b3);
+            if (indexb3 == -1) {
+                indexb3 = 251;
+            }
+            int indexb4 = fileContents.indexOf(b4);
+            if (indexb4 == -1) {
+                indexb4 = 251;
+            }
+            if (indexb1 < indexb2 && indexb1 < indexb3 && indexb1 < indexb4 && indexb1 < 250) {
+                copy1.append(fileContents.substring(indexb1));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(b2) != -1 && fileContents.indexOf(b2) < 250) {
-                indexb = fileContents.indexOf(b2);
-                copy1.append(fileContents.substring(indexb));
+            } else if (indexb2 < indexb1 && indexb2 < indexb3 && indexb2 < indexb4 && indexb2 < 250) {
+                copy1.append(fileContents.substring(indexb2));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(b3) != -1 && fileContents.indexOf(b3) < 250) {
-                indexb = fileContents.indexOf(b3);
-                copy1.append(fileContents.substring(indexb));
+            } else if (indexb3 < indexb1 && indexb3 < indexb2 && indexb3 < indexb4 && indexb3 < 250) {
+                copy1.append(fileContents.substring(indexb3));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(b4) != -1 && fileContents.indexOf(b4) < 250) {
-                indexb = fileContents.indexOf(b4);
-                copy1.append(fileContents.substring(indexb));
+            } else if (indexb4 < indexb1 && indexb4 < indexb2 && indexb4 < indexb3 && indexb4 < 250) {
+                copy1.append(fileContents.substring(indexb4));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -245,19 +278,28 @@ public class mainParser {
             String a2 = "Arranger";
             String a3 = "arranged";
             String arranger = "";
-            int indexa = fileContents.indexOf(a1);
-            if (indexa != -1 && indexa < 1000) {
-                copy1.append(fileContents.substring(indexa));
+            int indexa1 = fileContents.indexOf(a1);
+            int indexa2 = fileContents.indexOf(a2);
+            int indexa3 = fileContents.indexOf(a3);
+            if (indexa1 == -1) {
+                indexa1 = 1001;
+            }
+            if (indexa2 == -1) {
+                indexa2 = 1001;
+            }
+            if (indexa3 == -1) {
+                indexa3 = 1001;
+            }
+            if (indexa1 < indexa2 && indexa1 < indexa3 && indexa1 < 1000) {
+                copy1.append(fileContents.substring(indexa1));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(a2) != -1 && fileContents.indexOf(a2) < 1000) {
-                indexa = fileContents.indexOf(a2);
-                copy1.append(fileContents.substring(indexa));
+            } else if (indexa2 < indexa1 && indexa2 < indexa3 && indexa2 < 1000) {
+                copy1.append(fileContents.substring(indexa2));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(a3) != -1 && fileContents.indexOf(a3) < 1000) {
-                indexa = fileContents.indexOf(a3);
-                copy1.append(fileContents.substring(indexa));
+            } else if (indexa3 < indexa1 && indexa3 < indexa2 && indexa3 < 1000) {
+                copy1.append(fileContents.substring(indexa3));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -269,19 +311,28 @@ public class mainParser {
             String ag2 = "with";
             String ag3 = "Agent";
             String agent = "";
-            int indexag = fileContents.indexOf(ag1);
-            if (indexag != -1 && indexag < 1000) {
-                copy1.append(fileContents.substring(indexag));
+            int indexag1 = fileContents.indexOf(ag1);
+            int indexag2 = fileContents.indexOf(ag2);
+            int indexag3 = fileContents.indexOf(ag3);
+            if (indexag1 == -1) {
+                indexag1 = 1001;
+            }
+            if (indexag2 == -1) {
+                indexag2 = 1001;
+            }
+            if (indexag3 == -1) {
+                indexag3 = 1001;
+            }
+            if (indexag1 < indexag2 && indexag1 < indexag3 && indexag1 < 1000) {
+                copy1.append(fileContents.substring(indexag1));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(ag2) != -1 && fileContents.indexOf(ag2) < 1000) {
-                indexag = fileContents.indexOf(ag2);
-                copy1.append(fileContents.substring(indexag));
+            } else if (indexag2 < indexag1 && indexag2 < indexag3 && indexag2 < 1000) {
+                copy1.append(fileContents.substring(indexag2));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (fileContents.indexOf(ag3) != -1 && fileContents.indexOf(ag3) < 1000) {
-                indexag = fileContents.indexOf(ag3);
-                copy1.append(fileContents.substring(indexag));
+            } else if (indexag3 < indexag1 && indexag3 < indexag2 && indexag3 < 1000) {
+                copy1.append(fileContents.substring(indexag3));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -301,12 +352,13 @@ public class mainParser {
 
             //finds beginning of covenant
             String potentialRR = "INFORMATION UNDERTAKINGS";
+            String abc = "COVENANT";
+            int indexOfAbc = fileContents.indexOf(abc);
             int istherr = fileContents.indexOf(potentialRR);
             if (istherr != -1) {
+                rr.append(fileContents.substring(istherr, indexOfAbc));
                 fileContents.delete(0, istherr);
             } else {
-                String abc = "COVENANT";
-                int indexOfAbc = fileContents.indexOf(abc);
                 fileContents.delete(0, indexOfAbc);
             }
 
@@ -322,6 +374,7 @@ public class mainParser {
                     String newbie = fileContents.substring(j - 1);
                     boolean result = ends(newbie);
                     if (!result) {
+                        covenants.append(fileContents.substring(indexOfAbc, indexOfAbc + (j - 1)));
                         fileContents.delete(j - 1, fileContents.length() - 1);
                     }
                 }
@@ -330,6 +383,10 @@ public class mainParser {
             //create template
             String tt = templateTop(borrower, arranger, agent, amount, date);
             fileContents.insert(0, tt);
+
+            String tm = templateRR(rr);
+            System.out.println(tm);
+
 
             myWriter.write(fileContents.toString());
             myWriter.close();
