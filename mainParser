@@ -82,6 +82,14 @@ public class mainParser {
         String exception9 = "ARBN";
         String exception10 = "ABN";
         String exception11 = "FINANCIAL";
+        String exception12 = "EXHIBIT";
+        String exception13 = "IV";
+        String exception14 = "V";
+        String exception15 = "NT";
+        String exception16 = "ROC";
+        String exception17 = "ASE";
+        String exception18 = "III";
+
         int index = 0;
         char currentIndex = afterStart.charAt(0);
         while (Character.isUpperCase(currentIndex)) {
@@ -99,7 +107,14 @@ public class mainParser {
                 capitalLetters.toString().equals(exception8) ||
                 capitalLetters.toString().equals(exception9) ||
                 capitalLetters.toString().equals(exception10) ||
-                capitalLetters.toString().equals(exception11)) {
+                capitalLetters.toString().equals(exception11) ||
+                capitalLetters.toString().equals(exception12) ||
+                capitalLetters.toString().equals(exception13) ||
+                capitalLetters.toString().equals(exception14) ||
+                capitalLetters.toString().equals(exception15) ||
+                capitalLetters.toString().equals(exception16) ||
+                capitalLetters.toString().equals(exception17) ||
+                capitalLetters.toString().equals(exception18)) {
             return true;
         } else {
             return false;
@@ -365,9 +380,117 @@ public class mainParser {
                 output += "\n";
             }
         } else {
-            output += "No information on financial covenants found";
+            String ratios = "maintain the following financial ratios";
+            int indexratio = bottom.indexOf(ratios);
+            int m;
+            int n;
+            if (indexratio != -1) {
+                String catcl = "Current Assets to Current Liabilities";
+                int indexcatcl = bottom.indexOf(catcl);
+                if (indexcatcl != -1) {
+                    for (m = indexcatcl - 1; m > 0; m--) {
+                        char current = bottom.charAt(m);
+                        if (Character.isUpperCase(current)) {
+                            break;
+                        }
+                    }
+                    for (n = indexcatcl; n < bottom.length(); n++) {
+                        char current = bottom.charAt(n);
+                        if (current == '.') {
+                            break;
+                        }
+                    }
+                    output += bottom.substring(m, n);
+                    output += "\n";
+                }
+                String tltnw = "Total Liabilities to Tangible Net Worth";
+                int indextlnw = bottom.indexOf(tltnw);
+                if (indextlnw != -1) {
+                    for (m = indextlnw - 1; m > 0; m--) {
+                        char current = bottom.charAt(m);
+                        if (Character.isUpperCase(current)) {
+                            break;
+                        }
+                    }
+                    for (n = indextlnw; n < bottom.length(); n++) {
+                        char current = bottom.charAt(n);
+                        if (current == '.') {
+                            break;
+                        }
+                    }
+                    output += bottom.substring(m, n);
+                    output += "\n";
+                }
+                String icr = "Interest Coverage Ratio";
+                int indexicr = bottom.indexOf(icr);
+                if (indexicr != -1) {
+                    for (m = indexicr - 1; m > 0; m--) {
+                        char current = bottom.charAt(m);
+                        if (Character.isUpperCase(current)) {
+                            break;
+                        }
+                    }
+                    for (n = indexicr; n < bottom.length(); n++) {
+                        char current = bottom.charAt(n);
+                        if (current == '.') {
+                            break;
+                        }
+                    }
+                    output += bottom.substring(m, n);
+                    output += "\n";
+                }
+                String tnw = "Its Tangible Net Worth";
+                int indextnw = bottom.indexOf(tnw);
+                if (indextnw != -1) {
+                    for (n = indextnw; n < bottom.length(); n++) {
+                        char current = bottom.charAt(n);
+                        if (current == '.') {
+                            break;
+                        }
+                    }
+                    output += bottom.substring(indextnw, n);
+                    output += "\n";
+                }
+            }
+        }
+        output += "\n";
+        return output;
+    }
+
+    //___________________________________________________________________________________________________________
+    //pulls out reporting requirements from within the covenant
+    public static String rrInCovenant(StringBuilder copy) {
+        StringBuilder c = new StringBuilder();
+        c.append(copy.substring(0, copy.length()));
+        String output = "REPORTING REQUIREMENTS: ";
+        output += "\n";
+        String case1 = "days after the end of each";
+        int j;
+        int end;
+        int caseIndex = c.indexOf(case1);
+        if (caseIndex == -1) {
+            output += "No reporting requirements found";
             output += "\n";
         }
+        while (caseIndex != -1) {
+            for (j = caseIndex; j > 0; j--) {
+                char current = c.charAt(j);
+                if (Character.isUpperCase(current)) {
+                    break;
+                }
+            }
+            for (end = caseIndex; end < c.length(); end++) {
+                char current = c.charAt(end);
+                if (current == '.') {
+                    break;
+                }
+            }
+            output += c.substring(j, end);
+            output += "\n";
+            c.delete(0, end + 1);
+            caseIndex = c.indexOf(case1);
+        }
+        output += "\n";
         return output;
     }
 
@@ -584,7 +707,7 @@ public class mainParser {
 
             //finds amount
             int mi = fileContents.indexOf("$");
-            int ss = 0;
+            int ss;
             String before = fileContents.substring(mi - 3, mi + 1);
             String bb = "";
             for (ss = 0; ss < before.length(); ss++) {
@@ -605,14 +728,23 @@ public class mainParser {
 
             //finds beginning of covenant
             String potentialRR = "INFORMATION UNDERTAKINGS";
-            String abc = "COVENANT";
+            boolean rryes = false;
+            String abc = "COVENANTS";
+            int clength = abc.length();
             int indexOfAbc = fileContents.indexOf(abc);
             int istherr = fileContents.indexOf(potentialRR);
             if (istherr != -1) {
+                rryes = true;
                 rr.append(fileContents.substring(istherr, indexOfAbc));
                 fileContents.delete(0, istherr);
             } else {
-                fileContents.delete(0, indexOfAbc);
+                if (indexOfAbc < 3000) {
+                    fileContents.delete(0, indexOfAbc + clength);
+                    int secondtry = fileContents.indexOf(abc);
+                    fileContents.delete(0, secondtry);
+                } else {
+                    fileContents.delete(0, indexOfAbc);
+                }
             }
 
             //finds end of covenant
@@ -635,7 +767,12 @@ public class mainParser {
 
             //create template
             String tt = templateTop(borrower, arranger, agent, amount, date);
-            String tm = templateRR(rr);
+            String tm = "";
+            if (rryes) {
+                tm = templateRR(rr);
+            } else {
+                tm = rrInCovenant(fileContents);
+            }
             String tb = bottomTemplate(fileContents);
             String template = tt + tm + tb;
             template += "\n";
@@ -650,7 +787,8 @@ public class mainParser {
             myWriter.write(fileContents.toString());
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
