@@ -107,6 +107,7 @@ public class mainParser {
     }
 
     //___________________________________________________________________________________________________________
+    //creates top of the template with basic information
     public static String templateTop(String borrower, String arranger, String agent, String amount,
                                      String date) {
         String top = "Borrower: " + borrower + "\n";
@@ -119,6 +120,7 @@ public class mainParser {
     }
 
     //___________________________________________________________________________________________________________
+    // creates reporting requirements section of the template
     public static String templateRR(StringBuilder covenants) {
         StringBuilder copycat = new StringBuilder();
         StringBuilder secondInstance = new StringBuilder();
@@ -131,9 +133,7 @@ public class mainParser {
         int lengthfs = fs.length();
         int indexfs = covenants.indexOf(fs);
         int indexp = 0;
-        boolean finstat = false;
         if (indexfs != -1) {
-            finstat = true;
             //find end of reporting requirements
             secondInstance.append(covenants.substring(indexfs + lengthfs, covenants.length()));
             String period = ".";
@@ -300,6 +300,75 @@ public class mainParser {
             mid += "\n";
         }
         return mid;
+    }
+
+    //___________________________________________________________________________________________________________
+    // creates financial covenants section of the template
+    public static String bottomTemplate(StringBuilder bottom) {
+        String output = "FINANCIAL COVENANTS: ";
+        output += "\n";
+        int h = 0;
+        int i = 0;
+        int j = 0;
+        String fcStart = "Financial Covenants";
+        int indexFCStart = bottom.indexOf(fcStart);
+        if (indexFCStart != -1) {
+            int fcLength = fcStart.length();
+            int start = indexFCStart + fcLength;
+            String snippet = bottom.substring(start, bottom.length());
+            String nlr = "Net Leverage Ratio";
+            int indexStat1 = snippet.indexOf(nlr);
+            if (indexStat1 != -1) {
+                for (h = indexStat1; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat1, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Net Leverage Ratio found";
+                output += "\n";
+            }
+            String dscr = "Debt Service Cover Ratio";
+            int indexStat2 = snippet.indexOf(dscr);
+            if (indexStat2 != -1) {
+                for (i = indexStat2; i < snippet.length() - 1; i++) {
+                    char current = snippet.charAt(i);
+                    char next = snippet.charAt(i + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat2, i);
+                output += "\n";
+            } else {
+                output += "No requirements for Debt Service Coverage Ratio found";
+                output += "\n";
+            }
+            String gtt = "Guarantor Threshold Test";
+            int indexStat3 = snippet.indexOf(gtt);
+            if (indexStat3 != -1) {
+                for (j = indexStat3; j < snippet.length() - 1; j++) {
+                    char current = snippet.charAt(j);
+                    char next = snippet.charAt(j + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat3, j);
+                output += "\n";
+            } else {
+                output += "No requirements for Guarantor Threshold Test found";
+                output += "\n";
+            }
+        } else {
+            output += "No information on financial covenants found";
+            output += "\n";
+        }
+        return output;
     }
 
     //___________________________________________________________________________________________________________
@@ -547,7 +616,14 @@ public class mainParser {
             //create template
             String tt = templateTop(borrower, arranger, agent, amount, date);
             String tm = templateRR(rr);
-            String template = tt + tm;
+            String tb = bottomTemplate(fileContents);
+            String template = tt + tm + tb;
+            template += "\n";
+            template += "___________________________________________________________________________";
+            template += "\n";
+            template += "ENTIRETY OF COVENANTS:";
+            template += "\n";
+            template += "\n";
             fileContents.insert(0, template);
 
 
