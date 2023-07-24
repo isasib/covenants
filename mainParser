@@ -113,7 +113,7 @@ public class mainParser {
         String top = "Borrower: " + borrower + "\n";
         top += "Arranger: " + arranger + "\n";
         top += "Agent: " + agent + "\n";
-        top += "Amount: A$" + amount + "\n";
+        top += "Amount: " + amount + "\n";
         top += "Date: " + date + "\n";
         top += "\n";
         return top;
@@ -381,7 +381,7 @@ public class mainParser {
                 index++;
                 temp = total.charAt(index);
             }
-            while (Character.isUpperCase(temp) || Character.isSpaceChar(temp) || temp == ',') {
+            while (Character.isUpperCase(temp) || Character.isSpaceChar(temp) || temp == ',' || temp == '.') {
                 capitals.append(temp);
                 index++;
                 temp = total.charAt(index);
@@ -487,19 +487,23 @@ public class mainParser {
                 indexb4 = 251;
             }
             if (indexb1 < indexb2 && indexb1 < indexb3 && indexb1 < indexb4 && indexb1 < 250) {
-                copy1.append(fileContents.substring(indexb1));
+                int length1 = b1.length();
+                copy1.append(fileContents.substring(indexb1 + length1));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexb2 < indexb1 && indexb2 < indexb3 && indexb2 < indexb4 && indexb2 < 250) {
-                copy1.append(fileContents.substring(indexb2));
+                int length2 = b2.length();
+                copy1.append(fileContents.substring(indexb2 + length2));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexb3 < indexb1 && indexb3 < indexb2 && indexb3 < indexb4 && indexb3 < 250) {
-                copy1.append(fileContents.substring(indexb3));
+                int length3 = b3.length();
+                copy1.append(fileContents.substring(indexb3 + length3));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexb4 < indexb1 && indexb4 < indexb2 && indexb4 < indexb3 && indexb4 < 250) {
-                copy1.append(fileContents.substring(indexb4));
+                int length4 = b4.length();
+                copy1.append(fileContents.substring(indexb4 + length4));
                 borrower = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -524,15 +528,18 @@ public class mainParser {
                 indexa3 = 1001;
             }
             if (indexa1 < indexa2 && indexa1 < indexa3 && indexa1 < 1000) {
-                copy1.append(fileContents.substring(indexa1));
+                int length1 = a1.length();
+                copy1.append(fileContents.substring(indexa1 + length1));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexa2 < indexa1 && indexa2 < indexa3 && indexa2 < 1000) {
-                copy1.append(fileContents.substring(indexa2));
+                int length2 = a2.length();
+                copy1.append(fileContents.substring(indexa2 + length2));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexa3 < indexa1 && indexa3 < indexa2 && indexa3 < 1000) {
-                copy1.append(fileContents.substring(indexa3));
+                int length3 = a3.length();
+                copy1.append(fileContents.substring(indexa3 + length3));
                 arranger = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -557,15 +564,18 @@ public class mainParser {
                 indexag3 = 1001;
             }
             if (indexag1 < indexag2 && indexag1 < indexag3 && indexag1 < 1000) {
-                copy1.append(fileContents.substring(indexag1));
+                int length1 = ag1.length();
+                copy1.append(fileContents.substring(indexag1 + length1));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexag2 < indexag1 && indexag2 < indexag3 && indexag2 < 1000) {
-                copy1.append(fileContents.substring(indexag2));
+                int length2 = ag2.length();
+                copy1.append(fileContents.substring(indexag2 + length2));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else if (indexag3 < indexag1 && indexag3 < indexag2 && indexag3 < 1000) {
-                copy1.append(fileContents.substring(indexag3));
+                int length3 = ag3.length();
+                copy1.append(fileContents.substring(indexag3 + length3));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -574,8 +584,18 @@ public class mainParser {
 
             //finds amount
             int mi = fileContents.indexOf("$");
+            int ss = 0;
+            String before = fileContents.substring(mi - 3, mi + 1);
+            String bb = "";
+            for (ss = 0; ss < before.length(); ss++) {
+                char current = before.charAt(ss);
+                if (Character.isUpperCase(current) || current == '$') {
+                    bb += current;
+                }
+            }
             copy1.append(fileContents.substring(mi + 1));
             String amount = extract(copy1, "numbers");
+            amount = bb + amount;
             copy1.delete(0, copy1.length());
 
             //finds date
