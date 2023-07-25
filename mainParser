@@ -375,6 +375,38 @@ public class copycat {
                 output += "No requirements for Guarantor Threshold Test found";
                 output += "\n";
             }
+            String icr = "Interest Coverage Ratio";
+            int indexStat4 = snippet.indexOf(icr);
+            if (indexStat4 != -1) {
+                for (h = indexStat4; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat4, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Net Leverage Ratio found";
+                output += "\n";
+            }
+            String lr = "Leverage Ratio";
+            int indexStat5 = snippet.indexOf(lr);
+            if (indexStat5 != -1) {
+                for (h = indexStat5; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat5, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Net Leverage Ratio found";
+                output += "\n";
+            }
         } else {
             String ratios = "maintain the following financial ratios";
             int indexratio = bottom.indexOf(ratios);
