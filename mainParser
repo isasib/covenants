@@ -567,6 +567,7 @@ public class copycat {
     }
 
     //___________________________________________________________________________________________________________
+    @SuppressFBWarnings({"DM_DEFAULT_ENCODING", "DM_DEFAULT_ENCODING"})
     public static void main(String[] args) {
         //local variables
         int i = 0;
@@ -783,43 +784,74 @@ public class copycat {
             copy1.delete(0, copy1.length());
 
             toc.append(fileContents.substring(0, 10000));
+
+
             //finds beginning of covenant
+            boolean lowercase = false;
             String potentialRR = "INFORMATION UNDERTAKINGS";
-            boolean rryes = false;
             String abc = "COVENANTS";
-            int clength = abc.length();
             int indexOfAbc = fileContents.indexOf(abc);
+            boolean rryes = false;
             int istherr = fileContents.indexOf(potentialRR);
             if (istherr != -1) {
                 rryes = true;
-                rr.append(fileContents.substring(istherr, indexOfAbc));
+                rr.append(fileContents.substring(istherr));
                 fileContents.delete(0, istherr);
             } else {
-                if (indexOfAbc < 3000) {
-                    fileContents.delete(0, indexOfAbc + clength);
-                    int secondtry = fileContents.indexOf(abc);
-                    fileContents.delete(0, secondtry);
-                } else {
-                    fileContents.delete(0, indexOfAbc);
+                String check1 = "AFFIRMATIVE COVENANTS";
+                int indexcheck1 = fileContents.indexOf(check1);
+                int clength = check1.length();
+                // if affirmative covenants exist
+                if (indexcheck1 != -1) {
+                    String checkfor2 = fileContents.substring(indexcheck1 + clength);
+                    int indexcheck2 = checkfor2.indexOf(check1);
+                    if (indexcheck2 != -1) {
+                        fileContents.delete(0, indexcheck2);
+                    } else {
+                        String check2 = "Affirmative Covenants";
+                        int ic2 = fileContents.indexOf(check2);
+                        if (ic2 != -1) {
+                            lowercase = true;
+                            fileContents.delete(0, ic2);
+                        } else {
+                            fileContents.delete(0, indexcheck1);
+                        }
+                    }
+                }
+                // if only covenants exist
+                else {
+                    if (indexOfAbc < 3000) {
+                        fileContents.delete(0, indexOfAbc + clength);
+                        int secondtry = fileContents.indexOf(abc);
+                        fileContents.delete(0, secondtry);
+                    } else {
+                        fileContents.delete(0, indexOfAbc);
+                    }
                 }
             }
 
             //finds end of covenant
-            for (j = 0; j < fileContents.length(); j++) {
-                char current = fileContents.charAt(j);
-                if (Character.isUpperCase(current)) {
-                    countCapitals++;
-                } else {
-                    countCapitals = 0;
-                }
-                if (countCapitals == 2) {
-                    String newbie = fileContents.substring(j - 1);
-                    boolean result = ends(newbie);
-                    if (!result) {
-                        covenants.append(fileContents.substring(indexOfAbc, indexOfAbc + (j - 1)));
-                        fileContents.delete(j - 1, fileContents.length() - 1);
+            if (lowercase == false) {
+                for (j = 0; j < fileContents.length(); j++) {
+                    char current = fileContents.charAt(j);
+                    if (Character.isUpperCase(current)) {
+                        countCapitals++;
+                    } else {
+                        countCapitals = 0;
+                    }
+                    if (countCapitals == 2) {
+                        String newbie = fileContents.substring(j - 1);
+                        boolean result = ends(newbie);
+                        if (!result) {
+                            covenants.append(fileContents.substring(indexOfAbc, indexOfAbc + (j - 1)));
+                            fileContents.delete(j - 1, fileContents.length() - 1);
+                        }
                     }
                 }
+            } else {
+                String end = goToEnd(toc, "NEGATIVE COVENANTS");
+                int endspot = fileContents.indexOf(end);
+                fileContents.delete(endspot, fileContents.length() - 1);
             }
 
             //create template
