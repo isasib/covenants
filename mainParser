@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class copycat {
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static String scanPDF(String fileName) {
         //check to see if it is in the right location
         File tmpDir = new File(fileName);
@@ -85,6 +86,20 @@ public class copycat {
         String exception16 = "ROC";
         String exception17 = "ASE";
         String exception18 = "III";
+        String exception19 = "GAAP";
+        String exception20 = "VI";
+        String exception21 = "VII";
+        String exception22 = "VIII";
+        String exception23 = "IX";
+        String exception24 = "SEC";
+        String exception25 = "MLPF";
+        String exception26 = "PUBLIC";
+        String exception27 = "ERISA";
+        String exception28 = "REIT";
+        String exception29 = "ARTICLE";
+        String exception30 = "FRB";
+        String exception31 = "FCPA";
+        String exception32 = "CFR";
 
         int index = 0;
         char currentIndex = afterStart.charAt(0);
@@ -110,7 +125,21 @@ public class copycat {
                 capitalLetters.toString().equals(exception15) ||
                 capitalLetters.toString().equals(exception16) ||
                 capitalLetters.toString().equals(exception17) ||
-                capitalLetters.toString().equals(exception18)) {
+                capitalLetters.toString().equals(exception18) ||
+                capitalLetters.toString().equals(exception19) ||
+                capitalLetters.toString().equals(exception20) ||
+                capitalLetters.toString().equals(exception21) ||
+                capitalLetters.toString().equals(exception22) ||
+                capitalLetters.toString().equals(exception23) ||
+                capitalLetters.toString().equals(exception24) ||
+                capitalLetters.toString().equals(exception25) ||
+                capitalLetters.toString().equals(exception26) ||
+                capitalLetters.toString().equals(exception27) ||
+                capitalLetters.toString().equals(exception28) ||
+                capitalLetters.toString().equals(exception29) ||
+                capitalLetters.toString().equals(exception30) ||
+                capitalLetters.toString().equals(exception31) ||
+                capitalLetters.toString().equals(exception32)) {
             return true;
         } else {
             return false;
@@ -751,11 +780,13 @@ public class copycat {
             String ag2 = "with";
             String ag3 = "Agent";
             String ag4 = "as Australian Agent";
+            String ag5 = "as Administrative Agent";
             String agent = "";
             int indexag1 = fileContents.indexOf(ag1);
             int indexag2 = fileContents.indexOf(ag2);
             int indexag3 = fileContents.indexOf(ag3);
             int indexag4 = fileContents.indexOf(ag4);
+            int indexag5 = fileContents.indexOf(ag5);
             if (indexag1 == -1) {
                 indexag1 = 1001;
             }
@@ -768,23 +799,30 @@ public class copycat {
             if (indexag4 == -1) {
                 indexag4 = 1001;
             }
-            if (indexag1 < indexag2 && indexag1 < indexag3 && indexag1 < 1000 && indexag1 < indexag4) {
+            if (indexag5 == -1) {
+                indexag5 = 1001;
+            }
+            if (indexag1 < indexag2 && indexag1 < indexag3 && indexag1 < 1000 && indexag1 < indexag4 && indexag1 < indexag5) {
                 int length1 = ag1.length();
                 copy1.append(fileContents.substring(indexag1 + length1));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (indexag2 < indexag1 && indexag2 < indexag3 && indexag2 < 1000 && indexag2 < indexag4) {
+            } else if (indexag2 < indexag1 && indexag2 < indexag3 && indexag2 < 1000 && indexag2 < indexag4 && indexag2 < indexag5) {
                 int length2 = ag2.length();
                 copy1.append(fileContents.substring(indexag2 + length2));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (indexag3 < indexag1 && indexag3 < indexag2 && indexag3 < 1000 && indexag3 < indexag4) {
+            } else if (indexag3 < indexag1 && indexag3 < indexag2 && indexag3 < 1000 && indexag3 < indexag4 && indexag3 < indexag5) {
                 int length3 = ag3.length();
                 copy1.append(fileContents.substring(indexag3 + length3));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
-            } else if (indexag4 < indexag1 && indexag4 < indexag2 && indexag4 < 1000 && indexag4 < indexag3) {
+            } else if (indexag4 < indexag1 && indexag4 < indexag2 && indexag4 < 1000 && indexag4 < indexag3 && indexag4 < indexag5) {
                 copy1.append(fileContents.substring(indexag4 - 35));
+                agent = extract(copy1, "capitals");
+                copy1.delete(0, copy1.length());
+            } else if (indexag5 < indexag1 && indexag5 < indexag2 && indexag5 < 1000 && indexag5 < indexag3 && indexag5 < indexag4) {
+                copy1.append(fileContents.substring(indexag5 - 30));
                 agent = extract(copy1, "capitals");
                 copy1.delete(0, copy1.length());
             } else {
@@ -838,7 +876,7 @@ public class copycat {
                     String checkfor2 = fileContents.substring(indexcheck1 + clength);
                     int indexcheck2 = checkfor2.indexOf(check1);
                     if (indexcheck2 != -1) {
-                        fileContents.delete(0, indexcheck2);
+                        fileContents.delete(0, indexcheck2 + indexcheck1 + clength);
                     } else {
                         String check2 = "Affirmative Covenants";
                         int ic2 = fileContents.indexOf(check2);
