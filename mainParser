@@ -417,7 +417,7 @@ public class copycat {
                 output += snippet.substring(indexStat4, h);
                 output += "\n";
             } else {
-                output += "No requirements for Net Leverage Ratio found";
+                output += "No requirements for Interest Coverage Ratio found";
                 output += "\n";
             }
             String lr = "Leverage Ratio";
@@ -433,7 +433,143 @@ public class copycat {
                 output += snippet.substring(indexStat5, h);
                 output += "\n";
             } else {
-                output += "No requirements for Net Leverage Ratio found";
+                output += "No requirements for Leverage Ratio found";
+                output += "\n";
+            }
+            String fmmnw = "Fair Market Minimum Net Worth";
+            int indexStat6 = snippet.indexOf(fmmnw);
+            int length6 = fmmnw.length() + 1;
+            if (indexStat6 != -1) {
+                for (h = indexStat6 + length6; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat6, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Fair Market Minimum Net Worth found";
+                output += "\n";
+            }
+            String tltta = "Total Liabilities to Total Adjusted Asset Value";
+            int indexStat7 = snippet.indexOf(tltta);
+            int length7 = tltta.length() + 1;
+            if (indexStat7 != -1) {
+                for (h = indexStat7 + length7; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat7, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Total Liability to Total Adjusted Asset Value found";
+                output += "\n";
+            }
+            String sitta = "Secured Indebtedness to Total Adjusted Asset Value";
+            int indexStat8 = snippet.indexOf(sitta);
+            int length8 = sitta.length() + 1;
+            if (indexStat8 != -1) {
+                for (h = indexStat8 + length8; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat8, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Secured Indebtedness to Total Adjusted Asset Value found";
+                output += "\n";
+            }
+            String etfc = "EBITDA to Fixed Charges";
+            int indexStat9 = snippet.indexOf(etfc);
+            int length9 = etfc.length() + 1;
+            if (indexStat9 != -1) {
+                for (h = indexStat9 + length9; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat9, h);
+                output += "\n";
+            } else {
+                output += "No requirements for EBITDA to Fixed Charges found";
+                output += "\n";
+            }
+            String tui = "Total Unsecured Indebtedness";
+            int indexStat10 = snippet.indexOf(tui);
+            int length10 = tui.length() + 1;
+            if (indexStat10 != -1) {
+                for (h = indexStat10 + length10; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat10, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Total Unsecured Indebtedness found";
+                output += "\n";
+            }
+            String uicr = "Unencumbered Interest Coverage Ratio";
+            int indexStat11 = snippet.indexOf(uicr);
+            int length11 = uicr.length() + 1;
+            if (indexStat11 != -1) {
+                for (h = indexStat11 + length11; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat11, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Unencumbered Interest Coverage Ratios found";
+                output += "\n";
+            }
+            String dad = "Dividends and Distributions";
+            int indexStat12 = snippet.indexOf(dad);
+            int length12 = dad.length() + 1;
+            if (indexStat12 != -1) {
+                for (h = indexStat12 + length12; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat12, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Dividends and Distributions found";
+                output += "\n";
+            }
+            String mtav = "Mortgages to Total Adjusted Asset Value";
+            int indexStat13 = snippet.indexOf(mtav);
+            int length13 = mtav.length() + 1;
+            if (indexStat13 != -1) {
+                for (h = indexStat13 + length13; h < snippet.length() - 1; h++) {
+                    char current = snippet.charAt(h);
+                    char next = snippet.charAt(h + 1);
+                    if (current == '.' && !Character.isDigit(next)) {
+                        break;
+                    }
+                }
+                output += snippet.substring(indexStat13, h);
+                output += "\n";
+            } else {
+                output += "No requirements for Mortgages to Total Adjusted Asset Value found";
                 output += "\n";
             }
         } else {
