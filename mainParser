@@ -999,11 +999,15 @@ public class copycat {
             int indexOfAbc = fileContents.indexOf(abc);
             boolean rryes = false;
             int istherr = fileContents.indexOf(potentialRR);
+
+            //checks to see if information undertakings is even a section 
             if (istherr != -1) {
                 rryes = true;
                 rr.append(fileContents.substring(istherr));
                 fileContents.delete(0, istherr);
-            } else {
+            } 
+            //if its not, than we move onto affirmative or just plain ol covenants 
+else {
                 String check1 = "AFFIRMATIVE COVENANTS";
                 int indexcheck1 = fileContents.indexOf(check1);
                 int clength = check1.length();
