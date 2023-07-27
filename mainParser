@@ -1007,7 +1007,7 @@ public class copycat {
                 fileContents.delete(0, istherr);
             } 
             //if its not, than we move onto affirmative or just plain ol covenants 
-else {
+          else {
                 String check1 = "AFFIRMATIVE COVENANTS";
                 int indexcheck1 = fileContents.indexOf(check1);
                 int clength = check1.length();
